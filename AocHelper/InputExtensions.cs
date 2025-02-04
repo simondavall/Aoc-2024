@@ -32,6 +32,15 @@ public static class InputExtensions
     return longArray;
   }
 
+  public static char[][] To2DCharArray(this string str)
+  {
+    var array = str.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+    var charArray = new char[array.Length][];
+    for (var y = 0; y < array.Length; y++)
+      charArray[y] = array[y].ToCharArray();
+    return charArray;
+  }
+
   public static (T first, T second) ToTuplePair<T>(this T[] array)
   {
     return array.Length switch {
