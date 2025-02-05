@@ -93,7 +93,7 @@ internal static partial class Program
 
   private static (long[] results, long[][] operands) ProcessData(string input)
   {
-    var lines = File.ReadAllText("input.txt").Split('\n', StringSplitOptions.RemoveEmptyEntries);
+    var lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
     var results = new List<long>();
     var operands = new List<long[]>();

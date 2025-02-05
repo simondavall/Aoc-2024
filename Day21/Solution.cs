@@ -180,7 +180,7 @@ internal static partial class Program
 
   private static string[] ProcessInput(string input)
   {
-    var codes = File.ReadAllText("input.txt").Split('\n', StringSplitOptions.RemoveEmptyEntries);
+    var codes = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
     _numberSequences = ComputeSequences(NumericKeypad);
     _directionalSequences = ComputeSequences(DirectionalKeypad);
