@@ -9,8 +9,8 @@ internal static partial class Program
   private const long ExpectedPartOne = 4454;
   private const long ExpectedPartTwo = 1503;
 
-  private static Dictionary<(int, int), (int, int)> Visited = [];
-  private static List<(int, int, int, int)> Revisited = [];
+  private static Dictionary<(int, int), (int, int)> Part1Visited = [];
+  private static HashSet<(int, int, int, int)> Part2Visited = [];
   private static HashSet<(int, int, int, int)> NewVisited = [];
 
 
@@ -18,38 +18,37 @@ internal static partial class Program
   {
     var (map, (x, y)) = ProcessData(input);
 
-    Visited = [];
-    Revisited = [];
+    Part1Visited = [];
+    Part2Visited = [];
     NewVisited = [];
     int dy = -1;
     int dx = 0;
 
     while (true) {
-      Visited.TryAdd((x, y), (dx, dy));
+      Part1Visited.TryAdd((x, y), (dx, dy));
       var (nx, ny) = (x + dx, y + dy);
       if (!IsInBounds(nx, ny, map))
         break;
       if (map[ny][nx] == '#')
         (dx, dy) = (-dy, dx);
-      else {
-        x += dx;
-        y += dy;
-      }
+      else
+        (x, y) = (nx, ny);
     }
-    return Visited.Count;
+    return Part1Visited.Count;
   }
 
   private static long PartTwo(string input)
   {
-    var (map, (x, y)) = ProcessData(input);
+    var (map, start) = ProcessData(input);
+    var (x, y) = start;
     int dx = 0;
     int dy = -1;
 
     long tally = 0;
 
-    Revisited.Add((x, y, dx, dy));
+    Part2Visited.Add((x, y, dx, dy));
 
-    foreach (var ((nx, ny), (ndx, ndy)) in Visited) {
+    foreach (var ((nx, ny), (ndx, ndy)) in Part1Visited) {
       if ((x, y) == (nx, ny))
         continue;
 
@@ -60,7 +59,7 @@ internal static partial class Program
 
       map[ny][nx] = '.';
       (x, y, dx, dy) = (nx, ny, ndx, ndy);
-      Revisited.Add((x, y, dx, dy));
+      Part2Visited.Add((x, y, dx, dy));
     }
 
     return tally;
@@ -77,12 +76,10 @@ internal static partial class Program
         return false;
       if (map[ny][nx] == '#')
         (dx, dy) = (-dy, dx);
-      else {
-        x += dx;
-        y += dy;
-      }
+      else
+        (x, y) = (nx, ny);
 
-      if (Revisited.Contains((x, y, dx, dy)) || NewVisited.Contains((x, y, dx, dy)))
+      if (Part2Visited.Contains((x, y, dx, dy)) || NewVisited.Contains((x, y, dx, dy)))
         return true;
     }
   }
